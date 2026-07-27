@@ -1,0 +1,21 @@
+"""RLM-GRAPH service configuration."""
+
+service:
+  name: rlm-graph
+  port: 8797
+  mode: standalone
+
+db:
+  path: data/graph.duckdb
+  provider: duckdb
+
+importers:
+  governance_hub: true
+  bridges: true
+
+routes:
+  health: /health
+  metrics: /metrics
+  vote: /vote
+  deps: /graph/deps/<repo_id>
+  lineage: /graph/lineage/<artifact_id>
