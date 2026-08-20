@@ -1,5 +1,6 @@
 """Graph database schema and operations (SQLite/DuckDB)."""
 
+import json
 import sqlite3
 import threading
 from contextlib import contextmanager
@@ -131,8 +132,8 @@ class GraphDB:
                     node.label,
                     node.layer,
                     node.status,
-                    __import__("json").dumps(node.meta or {}),
-                    node.created_at or __import__("datetime").datetime.utcnow().isoformat(),
+                    json.dumps(node.meta or {}),
+                    node.created_at or datetime.utcnow().isoformat(),
                 ),
             )
 
@@ -147,8 +148,8 @@ class GraphDB:
                     edge.src,
                     edge.dst,
                     edge.kind,
-                    __import__("json").dumps(edge.meta or {}),
-                    edge.created_at or __import__("datetime").datetime.utcnow().isoformat(),
+                    json.dumps(edge.meta or {}),
+                    edge.created_at or datetime.utcnow().isoformat(),
                 ),
             )
 
