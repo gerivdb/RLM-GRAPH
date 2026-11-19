@@ -59,14 +59,14 @@ class RootxClient:
             }
 
     def query(self, root_id: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """Interroge une racine ROOTX.
+        """Interroge une racine ROOTX via l'endpoint /validate.
 
-        Retourne un dict avec les champs retournes par ROOTX,
+        Retourne un dict avec les champs {valid, confidence, errors},
         ou un dict d'erreur en cas d'echec.
         """
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
-            f"{self.config.endpoint}/query",
+            f"{self.config.endpoint}/validate",
             data=data,
             method="POST",
             headers={"Content-Type": "application/json"},
@@ -78,20 +78,23 @@ class RootxClient:
                 body = json.loads(resp.read().decode("utf-8"))
                 return {
                     "root_id": root_id,
-                    "status": "accepted",
-                    "rootx_response": body,
+                    "valid": body.get("valid", False),
+                    "confidence": body.get("confidence", 0.0),
+                    "errors": body.get("errors", []),
                 }
         except urllib.error.HTTPError as exc:
             return {
                 "root_id": root_id,
-                "status": "error",
-                "error": f"HTTP {exc.code}: {exc.reason}",
+                "valid": False,
+                "confidence": 0.0,
+                "errors": [f"HTTP {exc.code}: {exc.reason}"],
             }
         except Exception as exc:
             return {
                 "root_id": root_id,
-                "status": "error",
-                "error": str(exc),
+                "valid": False,
+                "confidence": 0.0,
+                "errors": [str(exc)],
             }
 
 
