@@ -19,6 +19,14 @@ from flask import Flask, jsonify, request
 from src.graph_db import GraphDB
 from src.importers import import_known_repositories, import_bridges
 
+from rlm_common import (
+    causal_validator,
+    curriculum_validator,
+    meta_coherence_fixer,
+    narrative_generator,
+    rootx_client,
+)
+
 app = Flask(__name__)
 
 DB_PATH = os.environ.get("RLM_GRAPH_DB", str(Path(__file__).resolve().parent.parent / "data" / "graph.duckdb"))
