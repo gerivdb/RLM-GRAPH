@@ -1,0 +1,5 @@
+name: RLM-GRAPH
+stratum: L2-PLATFORM
+profile: citizen
+wal_reference: "0x243"
+description: Graphe causal pour le moteur RLM
